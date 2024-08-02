@@ -1,2 +1,12 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+	import Footer from '../components/Footer.svelte';
+	import hassinen from '$lib/Hassinen-Barnen-Tumme.webp';
+</script>
+
+<div style="text-align: center;">
+	<h1>Welcome to the Hassinen Site</h1>
+	<img src={hassinen} alt="The Hassinen Family" />
+	<p>Please play some <a href="/chess">chess</a></p>
+</div>
+
+<Footer />
