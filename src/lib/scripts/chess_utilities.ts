@@ -1,6 +1,7 @@
 import { api_backend } from '$lib/settings';
 import type { Square } from '$lib/types';
 import type { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { board_store } from '$lib/stores/chess_stores';
 import axios from 'axios';
 
 function load(json_board: string): Square[][] | null {

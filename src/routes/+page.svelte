@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Footer from '../components/Footer.svelte';
-	import hassinen from '$lib/Hassinen-Barnen-Tumme.webp';
+	import hassinen from '$lib/static/Hassinen-Barnen-Tumme.webp';
 	import axios from 'axios';
 	let name = 'http';
 	type quote = {

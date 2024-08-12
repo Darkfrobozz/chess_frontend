@@ -1,73 +1,16 @@
 <script lang="ts">
-	import black_knight_sprite from '$lib/black/knight.png';
-	import black_bishop_sprite from '$lib/black/bishop.png';
-	import black_king_sprite from '$lib/black/king.png';
-	import black_pawn_sprite from '$lib/black/pawn.png';
-	import black_queen_sprite from '$lib/black/queen.png';
-	import black_rook_sprite from '$lib/black/rook.png';
-
-	import white_knight_sprite from '$lib/white/knight.png';
-	import white_bishop_sprite from '$lib/white/bishop.png';
-	import white_king_sprite from '$lib/white/king.png';
-	import white_pawn_sprite from '$lib/white/pawn.png';
-	import white_queen_sprite from '$lib/white/queen.png';
-	import white_rook_sprite from '$lib/white/rook.png';
-
 	import type { Square, Piece, Position } from '$lib/types';
-	import { board_store, possible_moves_store } from '../../stores/chess_stores';
-	import board_json from '$lib/start_chess_board.json';
-	import objectHash from 'object-hash';
-
-	function create_black_piece(sprite: string): Piece {
-		return {
-			team_white: false,
-			sprite
-		};
-	}
-	function create_white_piece(sprite: string): Piece {
-		return {
-			team_white: true,
-			sprite
-		};
-	}
-
-	const white_knight = create_white_piece(white_knight_sprite);
-	const white_bishop = create_white_piece(white_bishop_sprite);
-	const white_king = create_white_piece(white_king_sprite);
-	const white_queen = create_white_piece(white_queen_sprite);
-	const white_pawn = create_white_piece(white_pawn_sprite);
-	const white_rook = create_white_piece(white_rook_sprite);
-
-	const white_knight_hash = objectHash(JSON.stringify(white_knight));
-	const white_bishop_hash = objectHash(JSON.stringify(white_bishop));
-	const white_king_hash = objectHash(JSON.stringify(white_king));
-	const white_queen_hash = objectHash(JSON.stringify(white_queen));
-	const white_pawn_hash = objectHash(JSON.stringify(white_pawn));
-	const white_rook_hash = objectHash(JSON.stringify(white_rook));
-
-	const black_knight = create_black_piece(black_knight_sprite);
-	const black_bishop = create_black_piece(black_bishop_sprite);
-	const black_king = create_black_piece(black_king_sprite);
-	const black_queen = create_black_piece(black_queen_sprite);
-	const black_pawn = create_black_piece(black_pawn_sprite);
-	const black_rook = create_black_piece(black_rook_sprite);
-
-	const black_knight_hash = objectHash(JSON.stringify(black_knight));
-	const black_bishop_hash = objectHash(JSON.stringify(black_bishop));
-	const black_king_hash = objectHash(JSON.stringify(black_king));
-	const black_queen_hash = objectHash(JSON.stringify(black_queen));
-	const black_pawn_hash = objectHash(JSON.stringify(black_pawn));
-	const black_rook_hash = objectHash(JSON.stringify(black_rook));
+	import { board_store } from '$lib/stores/chess_stores';
+	import { all_directions, generate_moves, knight_jump } from '$lib/scripts/chess_moves';
 
 	let selected: Position;
 	let turn_white = true;
 	let board: Square[][];
-	let possible_moves: Position[];
+	let possible_moves: Position[] = [];
 	$: board = $board_store;
-	$: possible_moves = $possible_moves_store;
 
 	function register_square_click(box: Square): void {
-		// Move
+		// Check if the click amounts to a move
 		let moved = false;
 		if (possible_moves.some((pos) => box.id.x == pos.x && box.id.y == pos.y)) {
 			board[box.id.x][box.id.y].piece = board[selected.x][selected.y].piece;
@@ -75,6 +18,8 @@
 			moved = true;
 			turn_white = !turn_white;
 		}
+
+		// Reseting to make sure that highlighting stops.
 		selected = box.id;
 		possible_moves.forEach((pos) => {
 			board[pos.x][pos.y].color = board[pos.x][pos.y].original;
@@ -83,42 +28,15 @@
 		if (moved || !box.piece) {
 			return;
 		}
+
 		// Calculate possible moves of pieces or move piece to highlighted spot
+		// Also makes sure the piece is the right color to make a move
 		if ((box.piece.team_white && !turn_white) || (!box.piece.team_white && turn_white)) {
 			return;
 		}
-		console.log(box);
-		console.log(box.piece);
-		switch (objectHash(JSON.stringify(box.piece))) {
-			case white_pawn_hash:
-			case black_pawn_hash:
-				console.log('Moving a pawn');
-				push_pawn_moves(box as Square & { piece: Piece });
-				break;
-			case black_rook_hash:
-			case white_rook_hash:
-				push_rows_and_columns(box);
-				break;
-			case black_bishop_hash:
-			case white_bishop_hash:
-				push_diags(box);
-				break;
-			case black_queen_hash:
-			case white_queen_hash:
-				push_diags(box);
-				push_rows_and_columns(box);
-				break;
-			case black_king_hash:
-			case white_king_hash:
-				push_possible_moves_in_set(box as Square & { piece: Piece }, all_directions);
-				break;
-			case black_knight_hash:
-			case white_knight_hash:
-				push_possible_moves_in_set(box as Square & { piece: Piece }, knight_jump);
-				break;
-			default:
-				break;
-		}
+		possible_moves = generate_moves(box);
+
+		// Highlighting
 		possible_moves.forEach((pos) => {
 			board[pos.x][pos.y].color = 'highlight';
 		});

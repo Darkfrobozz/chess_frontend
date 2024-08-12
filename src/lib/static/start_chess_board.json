@@ -3,13 +3,13 @@
 		{
 			"original": "white",
 			"color": "white",
-			"piece": { "team_white": false, "sprite": "/src/lib/black/rook.png" },
+			"piece": { "team_white": false, "sprite": "/src/lib/static/black/rook.png" },
 			"id": { "x": 0, "y": 0 }
 		},
 		{
 			"original": "black",
 			"color": "black",
-			"piece": { "team_white": false, "sprite": "/src/lib/black/pawn.png" },
+			"piece": { "team_white": false, "sprite": "/src/lib/static/black/pawn.png" },
 			"id": { "x": 0, "y": 1 }
 		},
 		{ "original": "white", "color": "white", "piece": null, "id": { "x": 0, "y": 2 } },
@@ -19,13 +19,13 @@
 		{
 			"original": "white",
 			"color": "white",
-			"piece": { "team_white": true, "sprite": "/src/lib/white/pawn.png" },
+			"piece": { "team_white": true, "sprite": "/src/lib/static/white/pawn.png" },
 			"id": { "x": 0, "y": 6 }
 		},
 		{
 			"original": "black",
 			"color": "black",
-			"piece": { "team_white": true, "sprite": "/src/lib/white/rook.png" },
+			"piece": { "team_white": true, "sprite": "/src/lib/static/white/rook.png" },
 			"id": { "x": 0, "y": 7 }
 		}
 	],
@@ -33,13 +33,13 @@
 		{
 			"original": "black",
 			"color": "black",
-			"piece": { "team_white": false, "sprite": "/src/lib/black/knight.png" },
+			"piece": { "team_white": false, "sprite": "/src/lib/static/black/knight.png" },
 			"id": { "x": 1, "y": 0 }
 		},
 		{
 			"original": "white",
 			"color": "white",
-			"piece": { "team_white": false, "sprite": "/src/lib/black/pawn.png" },
+			"piece": { "team_white": false, "sprite": "/src/lib/static/black/pawn.png" },
 			"id": { "x": 1, "y": 1 }
 		},
 		{ "original": "black", "color": "black", "piece": null, "id": { "x": 1, "y": 2 } },
@@ -49,13 +49,13 @@
 		{
 			"original": "black",
 			"color": "black",
-			"piece": { "team_white": true, "sprite": "/src/lib/white/pawn.png" },
+			"piece": { "team_white": true, "sprite": "/src/lib/static/white/pawn.png" },
 			"id": { "x": 1, "y": 6 }
 		},
 		{
 			"original": "white",
 			"color": "white",
-			"piece": { "team_white": true, "sprite": "/src/lib/white/knight.png" },
+			"piece": { "team_white": true, "sprite": "/src/lib/static/white/knight.png" },
 			"id": { "x": 1, "y": 7 }
 		}
 	],
@@ -63,13 +63,13 @@
 		{
 			"original": "white",
 			"color": "white",
-			"piece": { "team_white": false, "sprite": "/src/lib/black/bishop.png" },
+			"piece": { "team_white": false, "sprite": "/src/lib/static/black/bishop.png" },
 			"id": { "x": 2, "y": 0 }
 		},
 		{
 			"original": "black",
 			"color": "black",
-			"piece": { "team_white": false, "sprite": "/src/lib/black/pawn.png" },
+			"piece": { "team_white": false, "sprite": "/src/lib/static/black/pawn.png" },
 			"id": { "x": 2, "y": 1 }
 		},
 		{ "original": "white", "color": "white", "piece": null, "id": { "x": 2, "y": 2 } },
@@ -79,13 +79,13 @@
 		{
 			"original": "white",
 			"color": "white",
-			"piece": { "team_white": true, "sprite": "/src/lib/white/pawn.png" },
+			"piece": { "team_white": true, "sprite": "/src/lib/static/white/pawn.png" },
 			"id": { "x": 2, "y": 6 }
 		},
 		{
 			"original": "black",
 			"color": "black",
-			"piece": { "team_white": true, "sprite": "/src/lib/white/bishop.png" },
+			"piece": { "team_white": true, "sprite": "/src/lib/static/white/bishop.png" },
 			"id": { "x": 2, "y": 7 }
 		}
 	],
@@ -93,13 +93,13 @@
 		{
 			"original": "black",
 			"color": "black",
-			"piece": { "team_white": false, "sprite": "/src/lib/black/queen.png" },
+			"piece": { "team_white": false, "sprite": "/src/lib/static/black/queen.png" },
 			"id": { "x": 3, "y": 0 }
 		},
 		{
 			"original": "white",
 			"color": "white",
-			"piece": { "team_white": false, "sprite": "/src/lib/black/pawn.png" },
+			"piece": { "team_white": false, "sprite": "/src/lib/static/black/pawn.png" },
 			"id": { "x": 3, "y": 1 }
 		},
 		{ "original": "black", "color": "black", "piece": null, "id": { "x": 3, "y": 2 } },
@@ -109,13 +109,13 @@
 		{
 			"original": "black",
 			"color": "black",
-			"piece": { "team_white": true, "sprite": "/src/lib/white/pawn.png" },
+			"piece": { "team_white": true, "sprite": "/src/lib/static/white/pawn.png" },
 			"id": { "x": 3, "y": 6 }
 		},
 		{
 			"original": "white",
 			"color": "white",
-			"piece": { "team_white": true, "sprite": "/src/lib/white/queen.png" },
+			"piece": { "team_white": true, "sprite": "/src/lib/static/white/queen.png" },
 			"id": { "x": 3, "y": 7 }
 		}
 	],
@@ -123,13 +123,13 @@
 		{
 			"original": "white",
 			"color": "white",
-			"piece": { "team_white": false, "sprite": "/src/lib/black/king.png" },
+			"piece": { "team_white": false, "sprite": "/src/lib/static/black/king.png" },
 			"id": { "x": 4, "y": 0 }
 		},
 		{
 			"original": "black",
 			"color": "black",
-			"piece": { "team_white": false, "sprite": "/src/lib/black/pawn.png" },
+			"piece": { "team_white": false, "sprite": "/src/lib/static/black/pawn.png" },
 			"id": { "x": 4, "y": 1 }
 		},
 		{ "original": "white", "color": "white", "piece": null, "id": { "x": 4, "y": 2 } },
@@ -139,13 +139,13 @@
 		{
 			"original": "white",
 			"color": "white",
-			"piece": { "team_white": true, "sprite": "/src/lib/white/pawn.png" },
+			"piece": { "team_white": true, "sprite": "/src/lib/static/white/pawn.png" },
 			"id": { "x": 4, "y": 6 }
 		},
 		{
 			"original": "black",
 			"color": "black",
-			"piece": { "team_white": true, "sprite": "/src/lib/white/king.png" },
+			"piece": { "team_white": true, "sprite": "/src/lib/static/white/king.png" },
 			"id": { "x": 4, "y": 7 }
 		}
 	],
@@ -153,13 +153,13 @@
 		{
 			"original": "black",
 			"color": "black",
-			"piece": { "team_white": false, "sprite": "/src/lib/black/bishop.png" },
+			"piece": { "team_white": false, "sprite": "/src/lib/static/black/bishop.png" },
 			"id": { "x": 5, "y": 0 }
 		},
 		{
 			"original": "white",
 			"color": "white",
-			"piece": { "team_white": false, "sprite": "/src/lib/black/pawn.png" },
+			"piece": { "team_white": false, "sprite": "/src/lib/static/black/pawn.png" },
 			"id": { "x": 5, "y": 1 }
 		},
 		{ "original": "black", "color": "black", "piece": null, "id": { "x": 5, "y": 2 } },
@@ -169,13 +169,13 @@
 		{
 			"original": "black",
 			"color": "black",
-			"piece": { "team_white": true, "sprite": "/src/lib/white/pawn.png" },
+			"piece": { "team_white": true, "sprite": "/src/lib/static/white/pawn.png" },
 			"id": { "x": 5, "y": 6 }
 		},
 		{
 			"original": "white",
 			"color": "white",
-			"piece": { "team_white": true, "sprite": "/src/lib/white/bishop.png" },
+			"piece": { "team_white": true, "sprite": "/src/lib/static/white/bishop.png" },
 			"id": { "x": 5, "y": 7 }
 		}
 	],
@@ -183,13 +183,13 @@
 		{
 			"original": "white",
 			"color": "white",
-			"piece": { "team_white": false, "sprite": "/src/lib/black/knight.png" },
+			"piece": { "team_white": false, "sprite": "/src/lib/static/black/knight.png" },
 			"id": { "x": 6, "y": 0 }
 		},
 		{
 			"original": "black",
 			"color": "black",
-			"piece": { "team_white": false, "sprite": "/src/lib/black/pawn.png" },
+			"piece": { "team_white": false, "sprite": "/src/lib/static/black/pawn.png" },
 			"id": { "x": 6, "y": 1 }
 		},
 		{ "original": "white", "color": "white", "piece": null, "id": { "x": 6, "y": 2 } },
@@ -199,13 +199,13 @@
 		{
 			"original": "white",
 			"color": "white",
-			"piece": { "team_white": true, "sprite": "/src/lib/white/pawn.png" },
+			"piece": { "team_white": true, "sprite": "/src/lib/static/white/pawn.png" },
 			"id": { "x": 6, "y": 6 }
 		},
 		{
 			"original": "black",
 			"color": "black",
-			"piece": { "team_white": true, "sprite": "/src/lib/white/knight.png" },
+			"piece": { "team_white": true, "sprite": "/src/lib/static/white/knight.png" },
 			"id": { "x": 6, "y": 7 }
 		}
 	],
@@ -213,13 +213,13 @@
 		{
 			"original": "black",
 			"color": "black",
-			"piece": { "team_white": false, "sprite": "/src/lib/black/rook.png" },
+			"piece": { "team_white": false, "sprite": "/src/lib/static/black/rook.png" },
 			"id": { "x": 7, "y": 0 }
 		},
 		{
 			"original": "white",
 			"color": "white",
-			"piece": { "team_white": false, "sprite": "/src/lib/black/pawn.png" },
+			"piece": { "team_white": false, "sprite": "/src/lib/static/black/pawn.png" },
 			"id": { "x": 7, "y": 1 }
 		},
 		{ "original": "black", "color": "black", "piece": null, "id": { "x": 7, "y": 2 } },
@@ -229,13 +229,13 @@
 		{
 			"original": "black",
 			"color": "black",
-			"piece": { "team_white": true, "sprite": "/src/lib/white/pawn.png" },
+			"piece": { "team_white": true, "sprite": "/src/lib/static/white/pawn.png" },
 			"id": { "x": 7, "y": 6 }
 		},
 		{
 			"original": "white",
 			"color": "white",
-			"piece": { "team_white": true, "sprite": "/src/lib/white/rook.png" },
+			"piece": { "team_white": true, "sprite": "/src/lib/static/white/rook.png" },
 			"id": { "x": 7, "y": 7 }
 		}
 	]
