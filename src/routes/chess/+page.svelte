@@ -13,6 +13,11 @@
 	import white_queen_sprite from '$lib/white/queen.png';
 	import white_rook_sprite from '$lib/white/rook.png';
 
+	import type { Square, Piece, Position } from '$lib/types';
+	import { board_store, possible_moves_store } from '../../stores/chess_stores';
+	import board_json from '$lib/start_chess_board.json';
+	import objectHash from 'object-hash';
+
 	function create_black_piece(sprite: string): Piece {
 		return {
 			team_white: false,
@@ -33,6 +38,13 @@
 	const white_pawn = create_white_piece(white_pawn_sprite);
 	const white_rook = create_white_piece(white_rook_sprite);
 
+	const white_knight_hash = objectHash(JSON.stringify(white_knight));
+	const white_bishop_hash = objectHash(JSON.stringify(white_bishop));
+	const white_king_hash = objectHash(JSON.stringify(white_king));
+	const white_queen_hash = objectHash(JSON.stringify(white_queen));
+	const white_pawn_hash = objectHash(JSON.stringify(white_pawn));
+	const white_rook_hash = objectHash(JSON.stringify(white_rook));
+
 	const black_knight = create_black_piece(black_knight_sprite);
 	const black_bishop = create_black_piece(black_bishop_sprite);
 	const black_king = create_black_piece(black_king_sprite);
@@ -40,203 +52,19 @@
 	const black_pawn = create_black_piece(black_pawn_sprite);
 	const black_rook = create_black_piece(black_rook_sprite);
 
-	type Position = {
-		x: number;
-		y: number;
-	};
+	const black_knight_hash = objectHash(JSON.stringify(black_knight));
+	const black_bishop_hash = objectHash(JSON.stringify(black_bishop));
+	const black_king_hash = objectHash(JSON.stringify(black_king));
+	const black_queen_hash = objectHash(JSON.stringify(black_queen));
+	const black_pawn_hash = objectHash(JSON.stringify(black_pawn));
+	const black_rook_hash = objectHash(JSON.stringify(black_rook));
 
-	type Piece = {
-		team_white: boolean;
-		sprite: string;
-	};
-
-	type Square = {
-		original: String;
-		color: String;
-		piece: Piece | null;
-		id: Position;
-	};
-
-	let possible_moves: Array<Position> = [];
 	let selected: Position;
 	let turn_white = true;
-	let column = 0;
-	let board = Array.from({ length: 8 }, () => {
-		let row = 0;
-		column++;
-		return Array.from({ length: 8 }, () => {
-			let piece = null;
-			switch (row) {
-				case 0:
-					switch (column - 1) {
-						case 1:
-						case 6:
-							piece = black_knight;
-							break;
-						case 2:
-						case 5:
-							piece = black_bishop;
-							break;
-
-						case 3:
-							piece = black_queen;
-							break;
-						case 4:
-							piece = black_king;
-							break;
-						default:
-							piece = black_rook;
-							break;
-					}
-					break;
-				case 7:
-					switch (column - 1) {
-						case 1:
-						case 6:
-							piece = white_knight;
-							break;
-						case 2:
-						case 5:
-							piece = white_bishop;
-							break;
-
-						case 3:
-							piece = white_queen;
-							break;
-						case 4:
-							piece = white_king;
-							break;
-						default:
-							piece = white_rook;
-							break;
-					}
-					break;
-				case 6:
-					piece = white_pawn;
-					break;
-				case 1:
-					piece = black_pawn;
-					break;
-				default:
-					break;
-			}
-			let color = (row + column - 1) % 2 === 0 ? 'white' : 'black';
-			row++;
-			return { original: color, color, piece, id: { x: column - 1, y: row - 1 } };
-		});
-	});
-
-	const add_positions = (pos1: Position, pos2: Position) => ({
-		x: pos1.x + pos2.x,
-		y: pos1.y + pos2.y
-	});
-	const outside = (pos1: Position) => pos1.x > 7 || pos1.x < 0 || pos1.y > 7 || pos1.y < 0;
-
-	function propagate_dir(
-		box: Square,
-		dir: Position,
-		max: number = 8,
-		capture: boolean = true
-	): Array<Position> {
-		let iter = add_positions(box.id, dir);
-		let result = [];
-		let i = 0;
-		while (!outside(iter) && i < max) {
-			let fetch_piece = board[iter.x][iter.y].piece;
-			if (fetch_piece) {
-				if (fetch_piece.team_white !== box.piece?.team_white && capture) {
-					result.push(iter);
-				}
-				return result;
-			} else {
-				result.push(iter);
-			}
-			iter = add_positions(iter, dir);
-			i++;
-		}
-		return result;
-	}
-
-	const upRight = { x: 1, y: -1 };
-	const upLeft = { x: -1, y: -1 };
-	const downLeft = { x: -1, y: 1 };
-	const downRight = { x: 1, y: 1 };
-
-	const knight_jump = [
-		{ x: 2, y: -1 },
-		{ x: 2, y: 1 },
-		{ x: -2, y: -1 },
-		{ x: -2, y: 1 },
-		{ x: 1, y: 2 },
-		{ x: -1, y: 2 },
-		{ x: 1, y: -2 },
-		{ x: -1, y: -2 }
-	];
-
-	const perpendiculars = [
-		{ x: 0, y: -1 },
-		{ x: 0, y: 1 },
-		{ x: 1, y: 0 },
-		{ x: -1, y: 0 }
-	];
-
-	const diagonals = [upRight, upLeft, downLeft, downRight];
-
-	const all_directions = diagonals.concat(perpendiculars);
-
-	function push_rows_and_columns(box: Square) {
-		for (const pos of perpendiculars) {
-			possible_moves = possible_moves.concat(propagate_dir(box, pos));
-		}
-	}
-
-	function push_diags(box: Square) {
-		for (const pos of diagonals) {
-			possible_moves = possible_moves.concat(propagate_dir(box, pos));
-		}
-	}
-
-	function push_possible_moves_in_set(box: Square & { piece: Piece }, set: Array<Position>) {
-		const location = box.id;
-		for (const iter of set) {
-			let suggest = add_positions(location, iter);
-			if (outside(suggest)) {
-				continue;
-			}
-			let suggest_square = board[suggest.x][suggest.y];
-			if (
-				suggest_square.color == 'highlight' ||
-				(suggest_square.piece && suggest_square.piece.team_white === box.piece.team_white)
-			) {
-				continue;
-			}
-			possible_moves.push(suggest);
-		}
-	}
-	// White pawns move like black only flipped on its head so let's extract and work with a modifier
-
-	function push_pawn_moves(box: Square & { piece: Piece }) {
-		function push_forward_enemy_only(dir: Position) {
-			if (!outside(dir)) {
-				const piece_pos = board[dir.x][dir.y].piece;
-				if (piece_pos && piece_pos.team_white !== box.piece.team_white) {
-					possible_moves.push(dir);
-				}
-			}
-		}
-		let extra_move =
-			(box.id.y === 6 && box.piece?.team_white) || (box.id.y === 1 && !box.piece?.team_white)
-				? 1
-				: 0;
-
-		let y_multiplier = box.piece.team_white ? -1 : 1;
-
-		possible_moves = possible_moves.concat(
-			propagate_dir(box, { x: 0, y: y_multiplier }, 1 + extra_move, false)
-		);
-		push_forward_enemy_only(add_positions(box.id, { x: 1, y: y_multiplier }));
-		push_forward_enemy_only(add_positions(box.id, { x: -1, y: y_multiplier }));
-	}
+	let board: Square[][];
+	let possible_moves: Position[];
+	$: board = $board_store;
+	$: possible_moves = $possible_moves_store;
 
 	function register_square_click(box: Square): void {
 		// Move
@@ -259,30 +87,33 @@
 		if ((box.piece.team_white && !turn_white) || (!box.piece.team_white && turn_white)) {
 			return;
 		}
-		switch (box.piece) {
-			case white_pawn:
-			case black_pawn:
+		console.log(box);
+		console.log(box.piece);
+		switch (objectHash(JSON.stringify(box.piece))) {
+			case white_pawn_hash:
+			case black_pawn_hash:
+				console.log('Moving a pawn');
 				push_pawn_moves(box as Square & { piece: Piece });
 				break;
-			case black_rook:
-			case white_rook:
+			case black_rook_hash:
+			case white_rook_hash:
 				push_rows_and_columns(box);
 				break;
-			case black_bishop:
-			case white_bishop:
+			case black_bishop_hash:
+			case white_bishop_hash:
 				push_diags(box);
 				break;
-			case black_queen:
-			case white_queen:
+			case black_queen_hash:
+			case white_queen_hash:
 				push_diags(box);
 				push_rows_and_columns(box);
 				break;
-			case black_king:
-			case white_king:
+			case black_king_hash:
+			case white_king_hash:
 				push_possible_moves_in_set(box as Square & { piece: Piece }, all_directions);
 				break;
-			case black_knight:
-			case white_knight:
+			case black_knight_hash:
+			case white_knight_hash:
 				push_possible_moves_in_set(box as Square & { piece: Piece }, knight_jump);
 				break;
 			default:

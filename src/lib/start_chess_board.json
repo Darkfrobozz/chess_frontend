@@ -1,0 +1,242 @@
+[
+	[
+		{
+			"original": "white",
+			"color": "white",
+			"piece": { "team_white": false, "sprite": "/src/lib/black/rook.png" },
+			"id": { "x": 0, "y": 0 }
+		},
+		{
+			"original": "black",
+			"color": "black",
+			"piece": { "team_white": false, "sprite": "/src/lib/black/pawn.png" },
+			"id": { "x": 0, "y": 1 }
+		},
+		{ "original": "white", "color": "white", "piece": null, "id": { "x": 0, "y": 2 } },
+		{ "original": "black", "color": "black", "piece": null, "id": { "x": 0, "y": 3 } },
+		{ "original": "white", "color": "white", "piece": null, "id": { "x": 0, "y": 4 } },
+		{ "original": "black", "color": "black", "piece": null, "id": { "x": 0, "y": 5 } },
+		{
+			"original": "white",
+			"color": "white",
+			"piece": { "team_white": true, "sprite": "/src/lib/white/pawn.png" },
+			"id": { "x": 0, "y": 6 }
+		},
+		{
+			"original": "black",
+			"color": "black",
+			"piece": { "team_white": true, "sprite": "/src/lib/white/rook.png" },
+			"id": { "x": 0, "y": 7 }
+		}
+	],
+	[
+		{
+			"original": "black",
+			"color": "black",
+			"piece": { "team_white": false, "sprite": "/src/lib/black/knight.png" },
+			"id": { "x": 1, "y": 0 }
+		},
+		{
+			"original": "white",
+			"color": "white",
+			"piece": { "team_white": false, "sprite": "/src/lib/black/pawn.png" },
+			"id": { "x": 1, "y": 1 }
+		},
+		{ "original": "black", "color": "black", "piece": null, "id": { "x": 1, "y": 2 } },
+		{ "original": "white", "color": "white", "piece": null, "id": { "x": 1, "y": 3 } },
+		{ "original": "black", "color": "black", "piece": null, "id": { "x": 1, "y": 4 } },
+		{ "original": "white", "color": "white", "piece": null, "id": { "x": 1, "y": 5 } },
+		{
+			"original": "black",
+			"color": "black",
+			"piece": { "team_white": true, "sprite": "/src/lib/white/pawn.png" },
+			"id": { "x": 1, "y": 6 }
+		},
+		{
+			"original": "white",
+			"color": "white",
+			"piece": { "team_white": true, "sprite": "/src/lib/white/knight.png" },
+			"id": { "x": 1, "y": 7 }
+		}
+	],
+	[
+		{
+			"original": "white",
+			"color": "white",
+			"piece": { "team_white": false, "sprite": "/src/lib/black/bishop.png" },
+			"id": { "x": 2, "y": 0 }
+		},
+		{
+			"original": "black",
+			"color": "black",
+			"piece": { "team_white": false, "sprite": "/src/lib/black/pawn.png" },
+			"id": { "x": 2, "y": 1 }
+		},
+		{ "original": "white", "color": "white", "piece": null, "id": { "x": 2, "y": 2 } },
+		{ "original": "black", "color": "black", "piece": null, "id": { "x": 2, "y": 3 } },
+		{ "original": "white", "color": "white", "piece": null, "id": { "x": 2, "y": 4 } },
+		{ "original": "black", "color": "black", "piece": null, "id": { "x": 2, "y": 5 } },
+		{
+			"original": "white",
+			"color": "white",
+			"piece": { "team_white": true, "sprite": "/src/lib/white/pawn.png" },
+			"id": { "x": 2, "y": 6 }
+		},
+		{
+			"original": "black",
+			"color": "black",
+			"piece": { "team_white": true, "sprite": "/src/lib/white/bishop.png" },
+			"id": { "x": 2, "y": 7 }
+		}
+	],
+	[
+		{
+			"original": "black",
+			"color": "black",
+			"piece": { "team_white": false, "sprite": "/src/lib/black/queen.png" },
+			"id": { "x": 3, "y": 0 }
+		},
+		{
+			"original": "white",
+			"color": "white",
+			"piece": { "team_white": false, "sprite": "/src/lib/black/pawn.png" },
+			"id": { "x": 3, "y": 1 }
+		},
+		{ "original": "black", "color": "black", "piece": null, "id": { "x": 3, "y": 2 } },
+		{ "original": "white", "color": "white", "piece": null, "id": { "x": 3, "y": 3 } },
+		{ "original": "black", "color": "black", "piece": null, "id": { "x": 3, "y": 4 } },
+		{ "original": "white", "color": "white", "piece": null, "id": { "x": 3, "y": 5 } },
+		{
+			"original": "black",
+			"color": "black",
+			"piece": { "team_white": true, "sprite": "/src/lib/white/pawn.png" },
+			"id": { "x": 3, "y": 6 }
+		},
+		{
+			"original": "white",
+			"color": "white",
+			"piece": { "team_white": true, "sprite": "/src/lib/white/queen.png" },
+			"id": { "x": 3, "y": 7 }
+		}
+	],
+	[
+		{
+			"original": "white",
+			"color": "white",
+			"piece": { "team_white": false, "sprite": "/src/lib/black/king.png" },
+			"id": { "x": 4, "y": 0 }
+		},
+		{
+			"original": "black",
+			"color": "black",
+			"piece": { "team_white": false, "sprite": "/src/lib/black/pawn.png" },
+			"id": { "x": 4, "y": 1 }
+		},
+		{ "original": "white", "color": "white", "piece": null, "id": { "x": 4, "y": 2 } },
+		{ "original": "black", "color": "black", "piece": null, "id": { "x": 4, "y": 3 } },
+		{ "original": "white", "color": "white", "piece": null, "id": { "x": 4, "y": 4 } },
+		{ "original": "black", "color": "black", "piece": null, "id": { "x": 4, "y": 5 } },
+		{
+			"original": "white",
+			"color": "white",
+			"piece": { "team_white": true, "sprite": "/src/lib/white/pawn.png" },
+			"id": { "x": 4, "y": 6 }
+		},
+		{
+			"original": "black",
+			"color": "black",
+			"piece": { "team_white": true, "sprite": "/src/lib/white/king.png" },
+			"id": { "x": 4, "y": 7 }
+		}
+	],
+	[
+		{
+			"original": "black",
+			"color": "black",
+			"piece": { "team_white": false, "sprite": "/src/lib/black/bishop.png" },
+			"id": { "x": 5, "y": 0 }
+		},
+		{
+			"original": "white",
+			"color": "white",
+			"piece": { "team_white": false, "sprite": "/src/lib/black/pawn.png" },
+			"id": { "x": 5, "y": 1 }
+		},
+		{ "original": "black", "color": "black", "piece": null, "id": { "x": 5, "y": 2 } },
+		{ "original": "white", "color": "white", "piece": null, "id": { "x": 5, "y": 3 } },
+		{ "original": "black", "color": "black", "piece": null, "id": { "x": 5, "y": 4 } },
+		{ "original": "white", "color": "white", "piece": null, "id": { "x": 5, "y": 5 } },
+		{
+			"original": "black",
+			"color": "black",
+			"piece": { "team_white": true, "sprite": "/src/lib/white/pawn.png" },
+			"id": { "x": 5, "y": 6 }
+		},
+		{
+			"original": "white",
+			"color": "white",
+			"piece": { "team_white": true, "sprite": "/src/lib/white/bishop.png" },
+			"id": { "x": 5, "y": 7 }
+		}
+	],
+	[
+		{
+			"original": "white",
+			"color": "white",
+			"piece": { "team_white": false, "sprite": "/src/lib/black/knight.png" },
+			"id": { "x": 6, "y": 0 }
+		},
+		{
+			"original": "black",
+			"color": "black",
+			"piece": { "team_white": false, "sprite": "/src/lib/black/pawn.png" },
+			"id": { "x": 6, "y": 1 }
+		},
+		{ "original": "white", "color": "white", "piece": null, "id": { "x": 6, "y": 2 } },
+		{ "original": "black", "color": "black", "piece": null, "id": { "x": 6, "y": 3 } },
+		{ "original": "white", "color": "white", "piece": null, "id": { "x": 6, "y": 4 } },
+		{ "original": "black", "color": "black", "piece": null, "id": { "x": 6, "y": 5 } },
+		{
+			"original": "white",
+			"color": "white",
+			"piece": { "team_white": true, "sprite": "/src/lib/white/pawn.png" },
+			"id": { "x": 6, "y": 6 }
+		},
+		{
+			"original": "black",
+			"color": "black",
+			"piece": { "team_white": true, "sprite": "/src/lib/white/knight.png" },
+			"id": { "x": 6, "y": 7 }
+		}
+	],
+	[
+		{
+			"original": "black",
+			"color": "black",
+			"piece": { "team_white": false, "sprite": "/src/lib/black/rook.png" },
+			"id": { "x": 7, "y": 0 }
+		},
+		{
+			"original": "white",
+			"color": "white",
+			"piece": { "team_white": false, "sprite": "/src/lib/black/pawn.png" },
+			"id": { "x": 7, "y": 1 }
+		},
+		{ "original": "black", "color": "black", "piece": null, "id": { "x": 7, "y": 2 } },
+		{ "original": "white", "color": "white", "piece": null, "id": { "x": 7, "y": 3 } },
+		{ "original": "black", "color": "black", "piece": null, "id": { "x": 7, "y": 4 } },
+		{ "original": "white", "color": "white", "piece": null, "id": { "x": 7, "y": 5 } },
+		{
+			"original": "black",
+			"color": "black",
+			"piece": { "team_white": true, "sprite": "/src/lib/white/pawn.png" },
+			"id": { "x": 7, "y": 6 }
+		},
+		{
+			"original": "white",
+			"color": "white",
+			"piece": { "team_white": true, "sprite": "/src/lib/white/rook.png" },
+			"id": { "x": 7, "y": 7 }
+		}
+	]
+]
