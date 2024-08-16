@@ -1,10 +1,12 @@
 <script lang="ts">
 	import type { Square, Piece, Position } from '$lib/types';
-	import { board_store, stats_store } from '$lib/stores/chess_stores';
+	import { board_store, castle_store, stats_store } from '$lib/stores/chess_stores';
 	import { all_directions, generate_moves, knight_jump } from '$lib/scripts/chess_moves';
 	import { pieceHashes } from '$lib/static/sprites';
 	import objectHash from 'object-hash';
 	import Footer from '../../components/Footer.svelte';
+	import { get } from 'svelte/store';
+	import { Mat } from 'pts';
 
 	let selected: Position;
 	let turn_white = true;
@@ -15,6 +17,8 @@
 	$: Stats = $stats_store;
 	$: board = $board_store;
 	$: previous_move = get_name(Stats.last_moved);
+
+	const at_pos = (pos: Position, board: Square[][]): Square => board[pos.x][pos.y];
 
 	function get_name(path_to_name: string | null): string {
 		if (path_to_name) {
@@ -65,10 +69,33 @@
 				}
 				return statics;
 			});
+			// Special moving of castles, in case piece is a king and x difference is bigger than 1
+			if (
+				(objectHash(JSON.stringify(board[selected.x][selected.y].piece)) ===
+					pieceHashes.black.king ||
+					objectHash(JSON.stringify(board[selected.x][selected.y].piece)) ===
+						pieceHashes.white.king) &&
+				get(castle_store).length > 0
+			) {
+				let castle_movement_selected = get(castle_store).find(
+					(x) => Math.abs(x.to.x - selected.x) == 1
+				);
+				if (castle_movement_selected) {
+					console.log('Castle movement aquired: ', castle_movement_selected);
+					board[castle_movement_selected.to.x][castle_movement_selected.to.y].piece = at_pos(
+						castle_movement_selected.from,
+						board
+					).piece;
+					board[castle_movement_selected.from.x][castle_movement_selected.from.y].piece = null;
+				}
+			}
+			// Selected is FROM and box.id.x is TO
 			board[box.id.x][box.id.y].piece = board[selected.x][selected.y].piece;
 			board[selected.x][selected.y].piece = null;
 			moved = true;
 			turn_white = !turn_white;
+			castle_store.set([]);
+			// Send move by converting TO and FROM to standardized chess notation.
 		}
 
 		// Reseting to make sure that highlighting stops.

@@ -36,4 +36,11 @@ const initial_stats = {
 	last_moved: ''
 };
 
+export type castle_move_info = {
+	from: Position;
+	to: Position;
+};
+
 export const stats_store = writable<Stats>(initial_stats);
+
+export const castle_store = writable<castle_move_info[]>([]);
