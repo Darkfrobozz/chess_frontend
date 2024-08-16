@@ -12,18 +12,19 @@ const outside = (pos1: Position) => pos1.x > 7 || pos1.x < 0 || pos1.y > 7 || po
 const contains_piece = (pos: Position) => get(board_store)[pos.x][pos.y].piece !== null;
 
 function propagate_dir(
-	box: Square,
+	pos: Position,
 	dir: Position,
+	white: boolean,
 	max: number = 8,
 	capture: boolean = true
 ): Array<Position> {
-	let iter = add_positions(box.id, dir);
+	let iter = add_positions(pos, dir);
 	let result = [];
 	let i = 0;
 	while (!outside(iter) && i < max) {
 		let fetch_piece = get(board_store)[iter.x][iter.y].piece;
 		if (fetch_piece) {
-			if (fetch_piece.team_white !== box.piece?.team_white && capture) {
+			if (fetch_piece.team_white !== white && capture) {
 				result.push(iter);
 			}
 			return result;
@@ -63,10 +64,10 @@ export const knight_jump = [
 
 export const all_directions = diagonals.concat(perpendiculars);
 
-function propagate_array(box: Square, arr: Position[]): Position[] {
+function propagate_array(initial_pos: Position, arr: Position[], white: boolean): Position[] {
 	let all_propagations: Position[] = [];
-	for (const pos of arr) {
-		all_propagations = all_propagations.concat(propagate_dir(box, pos));
+	for (const dir of arr) {
+		all_propagations = all_propagations.concat(propagate_dir(initial_pos, dir, white));
 	}
 	return all_propagations;
 }
@@ -107,7 +108,7 @@ function pawn_moves(box: Square & { piece: Piece }): Position[] {
 	let y_multiplier = box.piece.team_white ? -1 : 1;
 
 	available_moves = available_moves.concat(
-		propagate_dir(box, { x: 0, y: y_multiplier }, 1 + extra_move, false)
+		propagate_dir(box.id, { x: 0, y: y_multiplier }, box.piece.team_white, 1 + extra_move, false)
 	);
 	push_forward_enemy_only(add_positions(box.id, { x: 1, y: y_multiplier }));
 	push_forward_enemy_only(add_positions(box.id, { x: -1, y: y_multiplier }));
@@ -115,20 +116,21 @@ function pawn_moves(box: Square & { piece: Piece }): Position[] {
 }
 
 function position_is_threatened(pos: Position, white: boolean): boolean {
-	console.log('I am in position is threatened');
 	function find_pieces_in_positions(arr: Position[], pieces: string[]): boolean {
-		if (
-			arr.find((potential_pos) =>
-				pieces.find((piece_hash) => objectHash(potential_pos) == piece_hash)
+		const result = arr.some((potential_pos) =>
+			pieces.some(
+				(piece_hash) =>
+					objectHash(JSON.stringify(get(board_store)[potential_pos.x][potential_pos.y].piece)) ===
+					piece_hash
 			)
-		) {
+		);
+		if (result) {
 			return true;
 		}
 		return false;
 	}
-	let board = get(board_store);
 	let threatened = false;
-	let results = propagate_array(board[pos.x][pos.y], perpendiculars);
+	let results = propagate_array(pos, perpendiculars, white);
 	if (white) {
 		threatened =
 			threatened ||
@@ -138,7 +140,7 @@ function position_is_threatened(pos: Position, white: boolean): boolean {
 			threatened ||
 			find_pieces_in_positions(results, [pieceHashes.white.queen, pieceHashes.white.rook]);
 	}
-	results = propagate_array(board[pos.x][pos.y], diagonals);
+	results = propagate_array(pos, diagonals, white);
 	if (white) {
 		threatened =
 			threatened ||
@@ -148,7 +150,7 @@ function position_is_threatened(pos: Position, white: boolean): boolean {
 			threatened ||
 			find_pieces_in_positions(results, [pieceHashes.white.queen, pieceHashes.white.bishop]);
 	}
-	results = apply_offset(pos, diagonals, white);
+	results = apply_offset(pos, knight_jump, white);
 	if (white) {
 		threatened = threatened || find_pieces_in_positions(results, [pieceHashes.black.knight]);
 	} else {
@@ -160,13 +162,18 @@ function position_is_threatened(pos: Position, white: boolean): boolean {
 function no_between_exclusive_horizontal(pos1: Position, pos2: Position, white: boolean): boolean {
 	let movement = pos1.x < pos2.x ? { x: 1, y: 0 } : { x: -1, y: 0 };
 	let recording_castle_affected: castle_move_info[] = [];
+	if (position_is_threatened(pos1, white)) {
+		return false;
+	}
 	pos1 = add_positions(pos1, movement);
+	let move = 1;
 	let castle_to = pos1;
 	while (!outside(pos1) && pos1.x !== pos2.x) {
-		if (contains_piece(pos1) || position_is_threatened(pos1, white)) {
+		if (contains_piece(pos1) || (position_is_threatened(pos1, white) && move < 3)) {
 			return false;
 		}
 		pos1 = add_positions(pos1, movement);
+		move++;
 	}
 	recording_castle_affected.push({ from: pos1, to: castle_to });
 	castle_store.set(recording_castle_affected);
@@ -234,13 +241,13 @@ export function generate_moves(box: Square): Position[] {
 			return pawn_moves(box as Square & { piece: Piece });
 		case pieceHashes.black.rook:
 		case pieceHashes.white.rook:
-			return propagate_array(box, perpendiculars);
+			return propagate_array(box.id, perpendiculars, box.piece!.team_white);
 		case pieceHashes.black.bishop:
 		case pieceHashes.white.bishop:
-			return propagate_array(box, diagonals);
+			return propagate_array(box.id, diagonals, box.piece!.team_white);
 		case pieceHashes.black.queen:
 		case pieceHashes.white.queen:
-			return propagate_array(box, all_directions);
+			return propagate_array(box.id, all_directions, box.piece!.team_white);
 		case pieceHashes.black.king:
 		case pieceHashes.white.king:
 			let result = apply_offset(box.id, all_directions, box.piece!.team_white);
