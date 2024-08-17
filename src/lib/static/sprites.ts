@@ -1,4 +1,4 @@
-import type { Piece } from '$lib/types';
+import type { Piece, PieceNames } from '$lib/types';
 import objectHash from 'object-hash';
 
 import black_knight_sprite from '$lib/static/black/knight.png';
@@ -15,35 +15,37 @@ import white_pawn_sprite from '$lib/static/white/pawn.png';
 import white_queen_sprite from '$lib/static/white/queen.png';
 import white_rook_sprite from '$lib/static/white/rook.png';
 
-function create_black_piece(sprite: string): Piece {
+function create_black_piece(sprite: string, name: PieceNames): Piece {
 	return {
+		name,
 		team_white: false,
 		sprite
 	};
 }
-function create_white_piece(sprite: string): Piece {
+function create_white_piece(sprite: string, name: PieceNames): Piece {
 	return {
+		name,
 		team_white: true,
 		sprite
 	};
 }
 
 const whitePieces = {
-	knight: create_white_piece(white_knight_sprite),
-	bishop: create_white_piece(white_bishop_sprite),
-	king: create_white_piece(white_king_sprite),
-	queen: create_white_piece(white_queen_sprite),
-	pawn: create_white_piece(white_pawn_sprite),
-	rook: create_white_piece(white_rook_sprite)
+	knight: create_white_piece(white_knight_sprite, 'Knight'),
+	bishop: create_white_piece(white_bishop_sprite, 'Bishop'),
+	king: create_white_piece(white_king_sprite, 'King'),
+	queen: create_white_piece(white_queen_sprite, 'Queen'),
+	pawn: create_white_piece(white_pawn_sprite, 'Pawn'),
+	rook: create_white_piece(white_rook_sprite, 'Rook')
 };
 
 const blackPieces = {
-	knight: create_black_piece(black_knight_sprite),
-	bishop: create_black_piece(black_bishop_sprite),
-	king: create_black_piece(black_king_sprite),
-	queen: create_black_piece(black_queen_sprite),
-	pawn: create_black_piece(black_pawn_sprite),
-	rook: create_black_piece(black_rook_sprite)
+	knight: create_black_piece(black_knight_sprite, 'Knight'),
+	bishop: create_black_piece(black_bishop_sprite, 'Bishop'),
+	king: create_black_piece(black_king_sprite, 'King'),
+	queen: create_black_piece(black_queen_sprite, 'Queen'),
+	pawn: create_black_piece(black_pawn_sprite, 'Pawn'),
+	rook: create_black_piece(black_rook_sprite, 'Rook')
 };
 
 export const pieces = {

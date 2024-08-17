@@ -1,4 +1,4 @@
-import type { Position, Square, Piece } from '$lib/types';
+import type { Position, Square, Piece, PieceNames } from '$lib/types';
 import board_json from '$lib/static/chess_rep.json';
 import { json_representation_to_proper } from '$lib/scripts/chess_utilities';
 
@@ -22,7 +22,7 @@ type MovedStat = {
 export type Stats = {
 	move_tracker: MovedStat;
 	moves: number;
-	last_moved: string | null;
+	last_moved: PieceNames | null;
 	last_move: string;
 };
 
@@ -38,7 +38,7 @@ const moved_stats = {
 const initial_stats = {
 	move_tracker: moved_stats,
 	moves: 0,
-	last_moved: '',
+	last_moved: null,
 	last_move: ''
 };
 

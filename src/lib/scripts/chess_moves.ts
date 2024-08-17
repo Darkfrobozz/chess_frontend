@@ -92,12 +92,16 @@ function apply_offset(pos: Position, set: Array<Position>, white: boolean): Posi
 	return relative_positions;
 }
 
+import { decrypt_indice } from './chess_utilities';
+
 function pawn_moves(pos: Position, white: boolean): Position[] {
 	let available_moves: Position[] = [];
 	function push_forward_enemy_only(dir: Position) {
-		const matching_regex = /pawn/;
+		console.log('I am in pawns');
 		if (!outside(dir)) {
 			const piece_pos = get(board_store)[dir.x][dir.y].piece;
+			console.log('Here is the piece at dir: ', piece_pos);
+			console.log(`Here is the white: ${white} and here is the dir: ${dir}`);
 			if (piece_pos && piece_pos.team_white !== white) {
 				available_moves.push(dir);
 			} else if ((white && dir.y == 2) || (!white && dir.y == 5)) {
@@ -105,7 +109,7 @@ function pawn_moves(pos: Position, white: boolean): Position[] {
 				const start_index = decrypt_indice(stats.last_move.slice(0, 2));
 				const end_index = decrypt_indice(stats.last_move.slice(2, 4));
 				if (
-					stats.last_moved!.match(matching_regex) != null &&
+					stats.last_moved === 'Pawn' &&
 					start_index.x === dir.x &&
 					Math.abs(start_index.y - dir.y) == 1
 				) {
@@ -126,6 +130,8 @@ function pawn_moves(pos: Position, white: boolean): Position[] {
 	push_forward_enemy_only(add_positions(pos, { x: -1, y: y_multiplier }));
 	return available_moves;
 }
+
+import objectHash from 'object-hash';
 
 function position_is_threatened(pos: Position, white: boolean): boolean {
 	function find_pieces_in_positions(arr: Position[], pieces: string[]): boolean {
@@ -215,82 +221,47 @@ function no_between_exclusive_horizontal(pos1: Position, pos2: Position, white: 
 
 import { stats_store } from '$lib/stores/chess_stores';
 
-function get_castling(box: Square & { piece: Piece }): Position[] {
+function get_castling(pos: Position, white: boolean): Position[] {
 	let info = get(stats_store);
 	let result: Position[] = [];
-	if (box.piece.team_white && !info.move_tracker.white_king) {
-		if (
-			!info.move_tracker.white_rook_h1 &&
-			no_between_exclusive_horizontal(
-				box.id,
-				{ x: box.id.x + 3, y: box.id.y },
-				box.piece.team_white
-			)
-		) {
-			result.push({ x: 2, y: 0 });
-		}
-		if (
-			!info.move_tracker.white_rook_a1 &&
-			no_between_exclusive_horizontal(
-				box.id,
-				{ x: box.id.x - 4, y: box.id.y },
-				box.piece.team_white
-			)
-		) {
-			result.push({ x: -2, y: 0 });
-		}
-	} else if (!info.move_tracker.black_king) {
-		if (
-			!info.move_tracker.black_rook_h8 &&
-			no_between_exclusive_horizontal(
-				box.id,
-				{ x: box.id.x + 3, y: box.id.y },
-				box.piece.team_white
-			)
-		) {
-			result.push({ x: 2, y: 0 });
-		}
-		if (
-			!info.move_tracker.black_rook_a8 &&
-			no_between_exclusive_horizontal(
-				box.id,
-				{ x: box.id.x - 4, y: box.id.y },
-				box.piece.team_white
-			)
-		) {
-			result.push({ x: -2, y: 0 });
-		}
+	const moved_h = white ? info.move_tracker.white_rook_h1 : info.move_tracker.black_rook_h8;
+	const moved_a = white ? info.move_tracker.white_rook_a1 : info.move_tracker.black_rook_a8;
+	const moved_king = white ? info.move_tracker.white_king : info.move_tracker.black_king;
+	if (
+		!moved_king &&
+		!moved_h &&
+		no_between_exclusive_horizontal(pos, { x: pos.x + 3, y: pos.y }, white)
+	) {
+		result.push({ x: 2, y: 0 });
 	}
-	// This needs extra validation
-	return apply_offset(box.id, result, box.piece.team_white);
+	if (
+		!moved_king &&
+		!moved_a &&
+		no_between_exclusive_horizontal(pos, { x: pos.x - 4, y: pos.y }, white)
+	) {
+		result.push({ x: -2, y: 0 });
+	}
+	return apply_offset(pos, result, white);
 }
 
-import objectHash from 'object-hash';
-import { decrypt_indice } from './chess_utilities';
-
 export function generate_moves(box: Square): Position[] {
-	switch (objectHash(JSON.stringify(box.piece))) {
-		case pieceHashes.black.pawn:
-		case pieceHashes.white.pawn:
+	if (box.piece == null) {
+		return [];
+	}
+	switch (box.piece.name) {
+		case 'Pawn':
 			return pawn_moves(box.id, box.piece!.team_white);
-		case pieceHashes.black.rook:
-		case pieceHashes.white.rook:
+		case 'Rook':
 			return propagate_array(box.id, perpendiculars, box.piece!.team_white);
-		case pieceHashes.black.bishop:
-		case pieceHashes.white.bishop:
+		case 'Bishop':
 			return propagate_array(box.id, diagonals, box.piece!.team_white);
-		case pieceHashes.black.queen:
-		case pieceHashes.white.queen:
+		case 'Queen':
 			return propagate_array(box.id, all_directions, box.piece!.team_white);
-		case pieceHashes.black.king:
-		case pieceHashes.white.king:
+		case 'King':
 			let result = apply_offset(box.id, all_directions, box.piece!.team_white);
-			result = result.concat(get_castling(box as Square & { piece: Piece }));
+			result = result.concat(get_castling(box.id, box.piece.team_white));
 			return result;
-		case pieceHashes.black.knight:
-		case pieceHashes.white.knight:
+		case 'Knight':
 			return apply_offset(box.id, knight_jump, box.piece!.team_white);
-		default:
-			return [];
 	}
 }

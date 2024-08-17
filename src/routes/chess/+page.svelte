@@ -77,7 +77,7 @@
 				}
 				statics.moves += 1;
 				if (piece_to_move) {
-					statics.last_moved = piece_to_move.sprite;
+					statics.last_moved = piece_to_move.name;
 				}
 				statics.last_move = encrypt_indice(selected) + encrypt_indice(box.id);
 				return statics;
@@ -92,7 +92,6 @@
 					(x) => Math.abs(x.to.x - selected.x) == 1
 				);
 				if (castle_movement_selected) {
-					console.log('Castle movement aquired: ', castle_movement_selected);
 					board[castle_movement_selected.to.x][castle_movement_selected.to.y].piece = at_pos(
 						castle_movement_selected.from,
 						board
