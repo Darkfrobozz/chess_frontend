@@ -1,6 +1,6 @@
 import type { Position, Square, Piece } from '$lib/types';
-import { board_store, castle_store } from '$lib/stores/chess_stores';
-import type { castle_move_info } from '$lib/stores/chess_stores';
+import { board_store, piece_store } from '$lib/stores/chess_stores';
+import type { piece_cache } from '$lib/stores/chess_stores';
 import { get } from 'svelte/store';
 import { pieceHashes, pieces } from '$lib/static/sprites';
 
@@ -92,26 +92,38 @@ function apply_offset(pos: Position, set: Array<Position>, white: boolean): Posi
 	return relative_positions;
 }
 
-function pawn_moves(box: Square & { piece: Piece }): Position[] {
+function pawn_moves(pos: Position, white: boolean): Position[] {
 	let available_moves: Position[] = [];
 	function push_forward_enemy_only(dir: Position) {
+		const matching_regex = /pawn/;
 		if (!outside(dir)) {
 			const piece_pos = get(board_store)[dir.x][dir.y].piece;
-			if (piece_pos && piece_pos.team_white !== box.piece.team_white) {
+			if (piece_pos && piece_pos.team_white !== white) {
 				available_moves.push(dir);
+			} else if ((white && dir.y == 2) || (!white && dir.y == 5)) {
+				let stats = get(stats_store);
+				const start_index = decrypt_indice(stats.last_move.slice(0, 2));
+				const end_index = decrypt_indice(stats.last_move.slice(2, 4));
+				if (
+					stats.last_moved!.match(matching_regex) != null &&
+					start_index.x === dir.x &&
+					Math.abs(start_index.y - dir.y) == 1
+				) {
+					available_moves.push(dir);
+					piece_store.set([{ from: end_index, to: { x: -1, y: -1 } }]);
+				}
 			}
 		}
 	}
-	let extra_move =
-		(box.id.y === 6 && box.piece?.team_white) || (box.id.y === 1 && !box.piece?.team_white) ? 1 : 0;
+	let extra_move = (pos.y === 6 && white) || (pos.y === 1 && !white) ? 1 : 0;
 
-	let y_multiplier = box.piece.team_white ? -1 : 1;
+	let y_multiplier = white ? -1 : 1;
 
 	available_moves = available_moves.concat(
-		propagate_dir(box.id, { x: 0, y: y_multiplier }, box.piece.team_white, 1 + extra_move, false)
+		propagate_dir(pos, { x: 0, y: y_multiplier }, white, 1 + extra_move, false)
 	);
-	push_forward_enemy_only(add_positions(box.id, { x: 1, y: y_multiplier }));
-	push_forward_enemy_only(add_positions(box.id, { x: -1, y: y_multiplier }));
+	push_forward_enemy_only(add_positions(pos, { x: 1, y: y_multiplier }));
+	push_forward_enemy_only(add_positions(pos, { x: -1, y: y_multiplier }));
 	return available_moves;
 }
 
@@ -156,12 +168,33 @@ function position_is_threatened(pos: Position, white: boolean): boolean {
 	} else {
 		threatened = threatened || find_pieces_in_positions(results, [pieceHashes.white.knight]);
 	}
+	if (white) {
+		results = apply_offset(
+			pos,
+			[
+				{ x: 1, y: -1 },
+				{ x: -1, y: -1 }
+			],
+			white
+		);
+		threatened = threatened || find_pieces_in_positions(results, [pieceHashes.black.pawn]);
+	} else {
+		results = apply_offset(
+			pos,
+			[
+				{ x: 1, y: 1 },
+				{ x: -1, y: 1 }
+			],
+			white
+		);
+		threatened = threatened || find_pieces_in_positions(results, [pieceHashes.white.pawn]);
+	}
 	return threatened;
 }
 
 function no_between_exclusive_horizontal(pos1: Position, pos2: Position, white: boolean): boolean {
 	let movement = pos1.x < pos2.x ? { x: 1, y: 0 } : { x: -1, y: 0 };
-	let recording_castle_affected: castle_move_info[] = [];
+	let recording_castle_affected: piece_cache[] = [];
 	if (position_is_threatened(pos1, white)) {
 		return false;
 	}
@@ -176,7 +209,7 @@ function no_between_exclusive_horizontal(pos1: Position, pos2: Position, white: 
 		move++;
 	}
 	recording_castle_affected.push({ from: pos1, to: castle_to });
-	castle_store.set(recording_castle_affected);
+	piece_store.set(recording_castle_affected);
 	return true;
 }
 
@@ -233,12 +266,13 @@ function get_castling(box: Square & { piece: Piece }): Position[] {
 }
 
 import objectHash from 'object-hash';
+import { decrypt_indice } from './chess_utilities';
 
 export function generate_moves(box: Square): Position[] {
 	switch (objectHash(JSON.stringify(box.piece))) {
 		case pieceHashes.black.pawn:
 		case pieceHashes.white.pawn:
-			return pawn_moves(box as Square & { piece: Piece });
+			return pawn_moves(box.id, box.piece!.team_white);
 		case pieceHashes.black.rook:
 		case pieceHashes.white.rook:
 			return propagate_array(box.id, perpendiculars, box.piece!.team_white);

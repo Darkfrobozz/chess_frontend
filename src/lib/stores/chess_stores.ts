@@ -1,11 +1,15 @@
 import type { Position, Square, Piece } from '$lib/types';
-import board_json from '$lib/static/start_chess_board.json';
+import board_json from '$lib/static/chess_rep.json';
+import { json_representation_to_proper } from '$lib/scripts/chess_utilities';
 
 // src/lib/stores.js or src/lib/stores.ts if using TypeScript
 import { writable } from 'svelte/store';
 
 // Create the first store
-export const board_store = writable<Square[][]>(board_json);
+
+export const board_store = writable<Square[][]>(
+	json_representation_to_proper(JSON.stringify(board_json))
+);
 type MovedStat = {
 	black_rook_h8: boolean;
 	black_rook_a8: boolean;
@@ -15,10 +19,11 @@ type MovedStat = {
 	white_king: boolean;
 };
 
-type Stats = {
+export type Stats = {
 	move_tracker: MovedStat;
 	moves: number;
 	last_moved: string | null;
+	last_move: string;
 };
 
 const moved_stats = {
@@ -33,14 +38,15 @@ const moved_stats = {
 const initial_stats = {
 	move_tracker: moved_stats,
 	moves: 0,
-	last_moved: ''
+	last_moved: '',
+	last_move: ''
 };
 
-export type castle_move_info = {
+export type piece_cache = {
 	from: Position;
 	to: Position;
 };
 
 export const stats_store = writable<Stats>(initial_stats);
 
-export const castle_store = writable<castle_move_info[]>([]);
+export const piece_store = writable<piece_cache[]>([]);
